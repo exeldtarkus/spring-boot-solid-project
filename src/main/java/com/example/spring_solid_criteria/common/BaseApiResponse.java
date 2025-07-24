@@ -1,0 +1,59 @@
+package com.example.spring_solid_criteria.common;
+
+import com.example.spring_solid_criteria.dto.BaseApiResponseDto;
+import org.springframework.http.ResponseEntity;
+
+/**
+ * Utility class untuk membungkus response API dalam format standar {@link BaseApiResponseDto}.
+ * Umumnya digunakan untuk menghasilkan response JSON yang seragam untuk success dan error.
+ */
+public class BaseApiResponse {
+
+    /**
+     * Mengembalikan response sukses dengan data dan pesan custom.
+     *
+     * @param data    data hasil response
+     * @param message pesan sukses
+     * @param <T>     tipe data yang dikembalikan
+     * @return ResponseEntity dengan struktur BaseApiResponseDto dan status 200
+     */
+    public static <T> ResponseEntity<BaseApiResponseDto<T>> success(T data, String message) {
+        BaseApiResponseDto<T> response = new BaseApiResponseDto<>(
+                data,
+                true,
+                message,
+                200,
+                null
+        );
+        return ResponseEntity.ok(response);
+    }
+
+    /**
+     * Mengembalikan response sukses default dengan data dan pesan "Success".
+     *
+     * @param data data hasil response
+     * @param <T>  tipe data yang dikembalikan
+     * @return ResponseEntity dengan struktur BaseApiResponseDto dan status 200
+     */
+    public static <T> ResponseEntity<BaseApiResponseDto<T>> success(T data) {
+        return success(data, "Success");
+    }
+
+    /**
+     * Mengembalikan response error dengan status dan pesan tertentu.
+     *
+     * @param message     pesan error yang akan ditampilkan
+     * @param statusCode  kode HTTP status (misalnya 400, 404, 500)
+     * @return ResponseEntity dengan struktur BaseApiResponseDto dan status sesuai parameter
+     */
+    public static ResponseEntity<BaseApiResponseDto<Object>> error(String message, int statusCode) {
+        BaseApiResponseDto<Object> response = new BaseApiResponseDto<>(
+                null,
+                false,
+                message,
+                statusCode,
+                null
+        );
+        return ResponseEntity.status(statusCode).body(response);
+    }
+}
