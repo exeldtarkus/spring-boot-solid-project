@@ -7,12 +7,14 @@ services:
     ports:
       - "8012:8012"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/mydb
-      SPRING_DATASOURCE_USERNAME: user
-      SPRING_DATASOURCE_PASSWORD: password
-      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_CLOUD_CONSUL_HOST: consul-server
+      SPRING_CLOUD_CONSUL_PORT: 8500
+      SPRING_APPLICATION_NAME: springboot-app
+      SPRING_PROFILES_ACTIVE: docker
     depends_on:
       - db
+      - consul-server
+      - consul-seed
 
   db:
     image: mysql:8.0
@@ -28,5 +30,32 @@ services:
     volumes:
       - db-data:/var/lib/mysql
 
+  consul-server:
+    image: hashicorp/consul:1.12.2
+    container_name: consul-server
+    restart: unless-stopped
+    environment:
+      - CONSUL_BIND_INTERFACE=eth0
+    command: agent -server -bootstrap-expect=1 -ui -client=0.0.0.0
+    ports:
+      - "8500:8500"
+      - "8600:8600/udp"
+    volumes:
+      - consul_data:/consul/data
+
+  consul-seed:
+    image: curlimages/curl:7.87.0
+    container_name: consul-seed
+    depends_on:
+      - consul-server
+    entrypoint: >
+      sh -c "
+      sleep 3 &&
+      curl --request PUT --data 'jdbc:mysql://db:3306/mydb' http://consul-server:8500/v1/kv/config/springboot-app/spring.datasource.url &&
+      curl --request PUT --data 'user' http://consul-server:8500/v1/kv/config/springboot-app/spring.datasource.username &&
+      curl --request PUT --data 'password' http://consul-server:8500/v1/kv/config/springboot-app/spring.datasource.password
+      "
+
 volumes:
   db-data:
+  consul_data:

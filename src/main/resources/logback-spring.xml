@@ -62,4 +62,17 @@
         </root>
     </springProfile>
 
+    <!-- === DOCKER PROFILE === -->
+    <springProfile name="docker">
+        <root level="INFO">
+            <appender-ref ref="JSON_FILE"/>
+            <appender-ref ref="CONSOLE"/>
+        </root>
+
+        <logger name="com.example.spring_solid_criteria" level="DEBUG"/>
+        <logger name="org.springframework" level="INFO"/>
+        <logger name="org.hibernate.SQL" level="DEBUG"/>
+        <logger name="org.hibernate.orm.jdbc.bind" level="DEBUG"/>
+    </springProfile>
+
 </configuration>
