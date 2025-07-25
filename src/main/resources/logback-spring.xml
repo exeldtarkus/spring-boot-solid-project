@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration scan="true" scanPeriod="30 seconds">
 
-    <!-- JSON FILE APPENDER -->
+    <!-- FILE APPENDER -->
     <appender name="JSON_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>logs/application-log.json</file>
 
@@ -25,7 +25,7 @@
         </encoder>
     </appender>
 
-    <!-- JSON CONSOLE APPENDER -->
+    <!-- CONSOLE APPENDER -->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
             <providers>
@@ -41,15 +41,25 @@
         </encoder>
     </appender>
 
-    <!-- ROOT LOGGER -->
-    <root level="INFO">
-        <appender-ref ref="JSON_FILE"/>
-        <appender-ref ref="CONSOLE"/>
-    </root>
+    <!-- === DEV PROFILE === -->
+    <springProfile name="dev">
+        <root level="DEBUG">
+            <appender-ref ref="JSON_FILE"/>
+            <appender-ref ref="CONSOLE"/>
+        </root>
 
-    <!-- PACKAGE-SPECIFIC LOGGER -->
-    <logger name="com.example.spring_solid_criteria" level="DEBUG"/>
-    <logger name="org.hibernate.SQL" level="DEBUG"/>
-    <logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="TRACE"/>
-    <logger name="org.hibernate.orm.jdbc.bind" level="TRACE"/>
+        <logger name="com.example.spring_solid_criteria" level="DEBUG"/>
+        <logger name="org.hibernate.SQL" level="DEBUG"/>
+        <logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="TRACE"/>
+        <logger name="org.hibernate.orm.jdbc.bind" level="TRACE"/>
+    </springProfile>
+
+    <!-- === PROD PROFILE === -->
+    <springProfile name="prod">
+        <root level="INFO">
+            <appender-ref ref="JSON_FILE"/>
+            <appender-ref ref="CONSOLE"/>
+        </root>
+    </springProfile>
+
 </configuration>
