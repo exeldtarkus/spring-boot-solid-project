@@ -18,14 +18,13 @@ public class BaseApiResponse {
      * @return ResponseEntity dengan struktur BaseApiResponseDto dan status 200
      */
     public static <T> ResponseEntity<BaseApiResponseDto<T>> success(T data, String message) {
-        BaseApiResponseDto<T> response = new BaseApiResponseDto<>(
+        return ResponseEntity.ok(new BaseApiResponseDto<>(
                 data,
                 true,
                 message,
                 200,
                 null
-        );
-        return ResponseEntity.ok(response);
+        ));
     }
 
     /**
@@ -47,13 +46,12 @@ public class BaseApiResponse {
      * @return ResponseEntity dengan struktur BaseApiResponseDto dan status sesuai parameter
      */
     public static ResponseEntity<BaseApiResponseDto<Object>> error(String message, int statusCode) {
-        BaseApiResponseDto<Object> response = new BaseApiResponseDto<>(
+        return ResponseEntity.status(statusCode).body(new BaseApiResponseDto<>(
                 null,
                 false,
                 message,
                 statusCode,
                 null
-        );
-        return ResponseEntity.status(statusCode).body(response);
+        ));
     }
 }

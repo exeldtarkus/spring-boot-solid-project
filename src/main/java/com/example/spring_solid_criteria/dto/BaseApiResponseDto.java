@@ -1,29 +1,33 @@
 package com.example.spring_solid_criteria.dto;
 
-import java.time.Instant;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import java.time.ZonedDateTime;
 
+/**
+ * DTO standar untuk membungkus response API.
+ *
+ * @param <T> tipe data yang dikembalikan dalam response
+ */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class BaseApiResponseDto<T> {
     private T data;
-    private boolean isSuccess;
+    private boolean success;
     private String message;
     private int status;
     private String requestId;
-    private String timestamp;
+    private ZonedDateTime timestamp;
 
-    public BaseApiResponseDto() {
-        this.timestamp = Instant.now().toString();
-    }
-
-    public BaseApiResponseDto(T data, boolean isSuccess, String message, int status, String requestId) {
+    public BaseApiResponseDto(T data, boolean success, String message, int status, String requestId) {
         this.data = data;
-        this.isSuccess = isSuccess;
+        this.success = success;
         this.message = message;
         this.status = status;
         this.requestId = requestId;
-        this.timestamp = Instant.now().toString();
+        this.timestamp = ZonedDateTime.now();
     }
 
-    // Getters & Setters
+    // Getters dan Setters
+
     public T getData() {
         return data;
     }
@@ -33,11 +37,11 @@ public class BaseApiResponseDto<T> {
     }
 
     public boolean isSuccess() {
-        return isSuccess;
+        return success;
     }
 
     public void setSuccess(boolean success) {
-        isSuccess = success;
+        this.success = success;
     }
 
     public String getMessage() {
@@ -64,11 +68,11 @@ public class BaseApiResponseDto<T> {
         this.requestId = requestId;
     }
 
-    public String getTimestamp() {
+    public ZonedDateTime getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(String timestamp) {
+    public void setTimestamp(ZonedDateTime timestamp) {
         this.timestamp = timestamp;
     }
 }

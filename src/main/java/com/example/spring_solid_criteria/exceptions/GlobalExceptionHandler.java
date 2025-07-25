@@ -37,6 +37,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<BaseApiResponseDto<Object>> handleUnhandled(Exception ex) {
         ex.printStackTrace(); // Logging ke console, bisa diganti dengan logger
-        return BaseApiResponse.error("Terjadi kesalahan internal", HttpStatus.INTERNAL_SERVER_ERROR.value());
+        return BaseApiResponse.error("Internal Server Error", HttpStatus.INTERNAL_SERVER_ERROR.value());
     }
 }
