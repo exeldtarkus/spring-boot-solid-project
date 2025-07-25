@@ -27,7 +27,7 @@ public class RequestLoggingInterceptor implements HandlerInterceptor {
         MDC.put("requestId", requestId);
 
         // Logging ke file (akan otomatis dalam format JSON jika pakai logstash encoder)
-        log.info("Incoming request: {} {}", request.getMethod(), request.getRequestURI());
+        log.debug("Incoming request: {} {}", request.getMethod(), request.getRequestURI());
 
         return true;
     }
